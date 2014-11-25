@@ -1,0 +1,6 @@
+G:\Vee\Git\Rheo\RestfulService\RestfulService\RestfulService\bin\RestfulService.dll.config
+G:\Vee\Git\Rheo\RestfulService\RestfulService\RestfulService\bin\RestfulService.dll
+G:\Vee\Git\Rheo\RestfulService\RestfulService\RestfulService\bin\RestfulService.pdb
+G:\Vee\Git\Rheo\RestfulService\RestfulService\RestfulService\obj\Debug\RestfulService.csprojResolveAssemblyReference.cache
+G:\Vee\Git\Rheo\RestfulService\RestfulService\RestfulService\obj\Debug\RestfulService.dll
+G:\Vee\Git\Rheo\RestfulService\RestfulService\RestfulService\obj\Debug\RestfulService.pdb
