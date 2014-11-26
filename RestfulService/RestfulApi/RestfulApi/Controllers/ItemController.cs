@@ -1,48 +1,33 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using RestfulApi.Common.Contracts.Data;
-using RestfulApi.Common.Contracts.Services;
+using RestfulApi.Core.Contracts;
+using RestfulApi.Model.Models;
 
 namespace RestfulApi.Controllers
 {
-    public class ItemController : ApiController, IItemService
+    public class ItemController : ApiController
     {
-		// example :/api/Item/1
-	    [HttpGet]
-		public Item GetItem(int id)
-	    {
-			var items = Items();
+	    public IItemService ItemService { get; set; }
+	    //public IUnityContainer Container { get; set; }
 
-		    return items.FirstOrDefault(o => o.Id == id);
+	    public ItemController(IItemService itemService)
+	    {
+		    ItemService = itemService;
 	    }
 
-		// example :/api/Item?skip=1&take=2
-	    [HttpGet]
-	    public IEnumerable GetItems(int? skip = null, int? take = null)
-	    {
-		    return Items(skip,take);
-	    }
+		// example :/api/item/GetItem?barcode=1
+		[HttpGet]
+		public DAT_LOSTEILE GetItem(string barcode)
+		{
+			return ItemService.GetItemByBarcode(barcode);
+		}
 
-	    private IEnumerable<Item> Items(int? skip=null,int?take=null)
-	    {
-		    var items = new List<Item>();
-		    items.Add(new Item() {Id = 1, Name = "One"});
-		    items.Add(new Item() {Id = 2, Name = "Two"});
-		    items.Add(new Item() {Id = 3, Name = "Three"});
-		    items.Add(new Item() {Id = 4, Name = "Four"});
-		    var e = items.AsEnumerable();
-		    
-		    if (skip.HasValue)
-		    {
-			    e = e.Skip(skip.Value);
-		    }
-		    if (take.HasValue)
-		    {
-			    e = e.Take(take.Value);
-		    }
-		    return e;
-	    }
+		// example :/api/item/GetAllItems?barcode=1&skip=10&take=10
+		[HttpGet]
+		public IEnumerable GetAllItems(string barcode,int? skip = null, int? take = null)
+		{
+			return ItemService.GetItemsByBarcode(barcode, skip, take).ToList();
+		}
     }
 }
