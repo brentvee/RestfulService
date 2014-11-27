@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using Microsoft.Practices.Unity;
+﻿using System;
+using System.Linq;
 using RestfulApi.Core.Contracts;
 using RestfulApi.Model.Models;
 
@@ -7,31 +7,16 @@ namespace RestfulApi.Core.Services
 {
 	public class ItemService : ServiceBase, IItemService
 	{
-
-		public IQueryable<DAT_LOSTEILE> GetItemsByBarcode(string barcode, int? skip, int? take)
+		private IQueryable<DAT_LOSTEILE> Items
 		{
-			var items = GetItemsWithSkipTake(skip, take);
-			items = items.Where(o => o.BARCODE == barcode);
+			get { return Context.DAT_LOSTEILE.AsQueryable(); }
+		}
+
+		public IQueryable<DAT_LOSTEILE> GetItemsSince(DateTime since, int? skip, int? take)
+		{
+			var items = Items.Where(o => o.DAT_LASTMOD >= since);
+			items = SkipAndTake(items, skip, take);
 			return items;
 		}
-
-		public DAT_LOSTEILE GetItemByBarcode(string barcode)
-		{
-			return Context.DAT_LOSTEILE.OrderByDescending(o => o.DAT_LASTMOD).FirstOrDefault(o => o.BARCODE == barcode);
-		}
-
-		private IQueryable<DAT_LOSTEILE> GetItemsWithSkipTake(int? skip, int? take)
-		{
-			var items = Context.DAT_LOSTEILE.OrderBy(o => o.DAT_LASTMOD).AsQueryable();
-			if (skip.HasValue && skip.Value > 0)
-				items = items.Skip(skip.Value);
-			if (take.HasValue && take.Value > 0)
-				items = items.Take(take.Value);
-			else
-				// safety check to get a maximum #
-				items = items.Take(MaxRecordCount);
-			return items;
-		}
-
 	}
 }
